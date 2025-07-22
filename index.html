@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FC 모바일 스킬부스트 검색</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: black; /* 완전한 검은색 배경 */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 중앙 정렬 */
+        }
+
+        h1 {
+            margin-bottom: 20px; /* 제목과 입력란 간격 조정 */
+            text-shadow: 0 0 5px #39FF14; /* 네온 그린 텍스트 효과 */
+        }
+
+        .dropdown {
+            width: 100%;
+            max-width: 500px; /* 최대 너비 설정 */
+            position: relative; /* 드롭다운 위치를 위한 설정 */
+            margin: 10px 0; /* 드롭다운 간격 조정 */
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #222;
+            color: white;
+            font-size: 16px; /* 폰트 크기 조정 */
+            transition: border 0.3s; /* 테두리 색상 변화 효과 */
+        }
+
+        input[type="text"]:focus {
+            border: 2px solid #39FF14; /* 포커스 시 테두리 색상 변화 */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #333; /* 드롭다운 배경색 */
+            width: 100%; /* 드롭다운 너비를 입력란과 같게 설정 */
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            border-radius: 4px; /* 드롭다운 모서리 둥글게 */
+        }
+
+        .dropdown-content div {
+            color: white;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* 배경 색상 변화 효과 */
+        }
+
+        .dropdown-content div:hover {
+            background-color: #39FF14; /* 호버 시 배경색 변화 */
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #000; /* 배경을 검정색으로 변경 */
+            border: 1px solid #39FF14; /* 네온 그린 테두리 추가 */
+            border-radius: 4px;
+            width: 100%;
+            max-width: 500px; /* 최대 너비 설정 */
+        }
+
+        .bold {
+            font-weight: bold;
+            color: #39FF14; /* 강조된 텍스트를 네온 그린으로 설정 */
+        }
+
+        /* 반응형 디자인을 위한 미디어 쿼리 */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px; /* 모바일에서 패딩 조정 */
+            }
+
+            h1 {
+                font-size: 24px; /* 모바일에서 제목 크기 조정 */
+            }
+
+            input[type="text"] {
+                font-size: 14px; /* 모바일에서 입력란 폰트 크기 조정 */
+            }
+
+            .result {
+                font-size: 14px; /* 모바일에서 결과 폰트 크기 조정 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>FC 모바일 스킬부스트 검색</h1>
+
+    <!-- 스킬부스트 이름 검색 입력란 -->
+    <div class="dropdown">
+        <label for="skill-search">스킬부스트 검색:</label>
+        <input type="text" id="skill-search" placeholder="스킬부스트 이름 검색..." autocomplete="off">
+        <div id="skill-dropdown" class="dropdown-content"></div>
+    </div>
+
+    <!-- 검색 결과 표시 영역 -->
+    <div id="skill-content" class="result"></div>
+
+    <!-- 스탯 검색 입력란 (세 개로 나누기) -->
+    <div class="dropdown">
+        <label for="stat-search1">스탯 검색 1:</label>
+        <input type="text" id="stat-search1" placeholder="스탯 이름 입력..." autocomplete="off">
+        <div id="stat-dropdown1" class="dropdown-content"></div>
+    </div>
+
+    <div class="dropdown">
+        <label for="stat-search2">스탯 검색 2:</label>
+        <input type="text" id="stat-search2" placeholder="스탯 이름 입력..." autocomplete="off">
+        <div id="stat-dropdown2" class="dropdown-content"></div>
+    </div>
+
+    <div class="dropdown">
+        <label for="stat-search3">스탯 검색 3:</label>
+        <input type="text" id="stat-search3" placeholder="스탯 이름 입력..." autocomplete="off">
+        <div id="stat-dropdown3" class="dropdown-content"></div>
+    </div>
+
+    <button id="search-button" style="margin-top: 20px;">검색</button>
+
+    <!-- 검색 결과 표시 영역 -->
+    <div id="stat-content" class="result"></div>
+
+    <!-- 포지션 선택 -->
+    <div class="dropdown">
+        <label for="position-search">포지션 검색(1티어:개좋음 2티어:좋음):</label>
+        <input type="text" id="position-search" placeholder="포지션 입력..." autocomplete="off">
+        <div id="position-dropdown" class="dropdown-content"></div>
+    </div>
+
+    <div id="tier-content" class="result"></div>
+    기준: 2025/01/02
+    <script>
+        const skillBoosts = {
+            "막스맨": ["가속", "결정력", "중거리 슛", "위치 선정", "드리블"],
+            "파워풀": ["가속", "결정력", "위치선정", "헤딩", "힘"],
+            "스나이퍼": ["가속", "결정력", "중거리 슛", "위치 선정", "드리블"],
+            "마에스트로": ["가속", "결정력", "짧은 패스", "드리블", "볼 컨트롤"],
+            "아키텍트": ["가속", "슈팅력", "드리블", "볼 컨트롤", "민첩성"],
+            "결정력": ["결정력", "슈팅력", "위치 선정", "점프", "드리블"],
+            "타이거": ["결정력", "슈팅력", "위치 선정", "힘", "드리블"],
+            "공격 마스터": ["가속", "중거리 슛", "짧은 패스", "드리블", "볼 컨트롤"],
+            "호크": ["가속", "결정력", "크로스", "감아차기", "드리블"],
+            "나이프": ["가속", "긴패스", "크로스", "민첩성", "드리블"],
+            "세컨드 스트라이커": ["결정력", "드리블", "슈팅력", "볼 컨트롤", "짧은 패스"],
+            "슈퍼카": ["가속", "질주 속도", "크로스", "긴패스", "드리블"],
+            "위치 선정": ["위치 선정", "헤딩", "슈팅력", "민첩성", "밸런스"],
+            "헤딩": ["결정력", "반응도", "헤딩", "힘", "점프"],
+            "공격": ["볼 컨트롤", "결정력", "질주 속도", "반응도", "발리슛"],
+            "민첩성": ["결정력", "드리블", "민첩성", "반응도", "밸런스"],
+            "페이스": ["가속", "질주 속도", "긴패스", "크로스", "민첩성"],
+            "슈팅": ["결정력", "슈팅력", "중거리 슛", "위치 선정", "발리슛"],
+            "속도": ["질주 속도", "위치 선정", "드리블", "볼 컨트롤", "민첩성"],
+            "어택미드": ["질주 속도", "짧은 패스", "긴패스", "드리블", "민첩성"],
+            "패스": ["짧은 패스", "긴패스", "시야", "크로스", "밸런스"],
+                        "제너럴리스트": ["중거리 슛", "민첩성", "반응도", "가로채기", "공격성"],
+            "주장": ["드리블", "짧은 패스", "볼 컨트롤", "시야", "민첩성"],
+            "짧은 패스": ["짧은 패스", "위치 선정", "드리블", "태클", "힘"],
+            "플레이메이커": ["짧은 패스", "긴패스", "시야", "드리블", "반응도"],
+            "미드엔진": ["중거리 슛", "긴패스", "감아차기", "밸런스", "태클"],
+            "홀딩": ["가속", "마크", "태클", "공격성", "힘"],
+            "월": ["가속", "마크", "태클", "가로채기", "공격성"],
+            "특별 구성": ["마크", "질주 속도", "볼 컨트롤", "힘", "슬라이딩 태클"],
+            "스톤": ["질주 속도", "긴패스", "마크", "가로채기", "공격성"],
+            "공격성": ["마크", "슬라이딩 태클", "헤딩", "힘", "점프"],
+            "가로채기": ["가로채기", "반응도", "헤딩", "태클", "공격성"],
+            "수비 마스터": ["가속", "태클", "슬라이딩 태클", "헤딩", "공격성"],
+            "앵커": ["마크", "가로채기", "헤딩", "힘", "점프"],
+            "수비": ["긴패스", "밸런스", "마크", "슬라이딩 태클", "헤딩"],
+            "피지컬": ["반응도", "슬라이딩 태클", "힘", "공격성", "점프"],
+            "반응도": ["크로스", "드리블", "슬라이딩 태클", "반응도", "가로채기"],
+            "마크": ["짧은 패스", "반응도", "마크", "가로채기", "헤딩"],
+            "플라이윙": ["질주 속도", "긴패스", "마크", "가로채기", "공격성"],
+            "글래디에이터": ["가속", "크로스", "마크", "태클", "가로채기"],
+            "라스트라인": ["다이빙", "반사 신경", "GK 위치 선정", "핸들링", "킥"],
+            "GK 다이빙": ["다이빙", "반사 신경", "GK 위치 선정", "핸들링", "반응도"],
+            "글러브": ["다이빙", "GK 위치 선정", "반사 신경", "긴패스", "킥"],
+            "반사 신경": ["다이빙", "GK 위치 선정", "반사 신경", "긴패스", "민첩성"],
+            "다이빙": ["다이빙", "핸들링", "점프", "긴패스", "반사 신경"],
+            "핸들링": ["핸들링", "킥", "반응도", "긴패스", "반사 신경"],
+            "카운터": ["긴패스", "민첩성", "중거리 슛", "위치 선정", "시야"],
+            "GK 위치 선정": ["GK 위치 선정", "킥", "반응도", "긴패스", "다이빙"],
+            "넘버원": ["GK 위치 선정", "다이빙", "킥", "반응도", "핸들링"],
+            "GK 제너럴리스트": ["킥", "반응도", "GK 위치 선정", "긴패스", "핸들링"],
+            "프리킥": ["프리킥", "감아차기", "중거리 슛", "슈팅력", "시야"],
+            "슈팅력": ["질주 속도", "슈팅력", "중거리 슛", "발리슛", "볼 컨트롤"],
+            "드리블": ["결정력", "중거리 슛", "드리블", "반응도", "발리슛"],
+            "가속": ["가속", "위치 선정", "발리슛", "긴패스", "반응도"],
+            "크로스": ["긴패스", "시야", "크로스", "감아차기", "마크"],
+            "볼 컨트롤": ["짧은 패스", "크로스", "드리블", "볼 컨트롤", "밸런스"],
+            "긴패스": ["긴패스", "시야", "감아차기", "민첩성", "가로채기"],
+            "시야": ["가속", "짧은 패스", "긴패스", "시야", "드리블"],
+            "태클": ["반응도", "밸런스", "태클", "슬라이딩 태클", "힘"],
+            "힘": ["밸런스", "태클", "힘", "헤딩", "점프"]
+        };
+
+        // 포지션과 티어표 매핑
+        const positionTiers = {
+            "ST": [
+                ["막스맨", "파워풀", "아키텍트", "타이거"],
+                [ "결정력", "공격 마스터", "스나이퍼", "슈퍼카", "로켓", "위치 선정", "민첩성"],
+                [ "헤딩", "세컨드 스트라이커", "페이스"],
+                ["공격", "슈팅", "슈팅력"]
+            ],
+            "CF": [
+                ["막스맨", "아키텍트"],
+                ["타이거", "결정력", "공격 마스터", "파워풀", "스나이퍼", "슈퍼카", "로켓", "위치 선정"],
+                ["헤딩", "세컨드 스트라이커", "페이스"],
+                ["공격", "슈팅", "슈팅력"]
+            ],
+            "LW": [
+                ["나이프", "슈퍼카", "로켓"],
+                ["마에스트로", "스나이퍼", "호크", "속도", "공격 마스터", "세컨드 스트라이커"],
+                ["페이스", "위치 선정"],
+                ["민첩성"]
+            ],
+            "RW": [
+                ["나이프", "슈퍼카", "로켓"],
+                ["마에스트로", "스나이퍼", "호크", "속도", "공격 마스터", "세컨드 스트라이커"],
+                ["페이스", "위치 선정"],
+                ["민첩성"]
+            ],
+            "LM": [
+                ["나이프", "슈퍼카", "로켓"],
+                ["마에스트로", "스나이퍼", "호크", "세컨드 스트라이커", "속도", "공격 마스터"],
+                ["세컨드 스트라이커", "페이스"],
+                ["민첩성", "위치 선정"]
+            ],
+            "RM": [
+                ["나이프", "슈퍼카", "로켓"],
+                ["마에스트로", "스나이퍼", "호크", "세컨드 스트라이커", "속도", "공격 마스터"],
+                ["세컨드 스트라이커", "페이스"],
+                ["민첩성", "위치 선정"]
+            ],
+            "CAM": [
+                ["아키텍트", "스나이퍼"],
+                ["공격 마스터", "어택미드", "마에스트로"],
+                ["플레이메이커", "미드엔진", "짧은 패스"],
+                ["카운터", "프리킥", "시야", "볼 컨트롤", "가속", "드리블", "제너럴리스트", "패스"]
+            ],
+            "CM": [
+                ["아키텍트", "스나이퍼"],
+                ["공격 마스터", "어택미드", "짧은 패스", "마에스트로"],
+                ["플레이메이커", "주장", "미드엔진", "슈팅력"],
+                ["카운터", "프리킥", "시야", "볼 컨트롤", "가속", "드리블", "제너럴리스트", "패스"]
+            ],
+            "CDM": [
+                ["월", "특별 구성", "스톤"],
+                ["미드엔진", "짧은 패스", "아키텍트"],
+                ["주장", "플레이메이커"],
+                ["반응도", "제너럴리스트", "가로채기", "공격성"]
+            ],
+            "CB": [
+                ["홀딩", "월", "스톤", "특별 구성"],
+                ["수비 마스터"],
+                ["앵커", "마크", "공격성"],
+                ["수비", "피지컬", "힘", "태클"]
+            ],
+            "LB": [
+                ["글래디에이터", "플라이윙", "특별 구성"],
+                ["스톤", "홀딩"],
+                ["가로채기", "크로스"],
+                ["반응도"]
+            ],
+            "RB": [
+                ["글래디에이터", "스톤", "특별 구성"],
+                ["플라이윙", "홀딩"],
+                ["가로채기", "크로스"],
+                ["반응도"]
+            ],
+            "LWB": [
+                ["글래디에이터", "스톤", "특별 구성"],
+                ["플라이윙", "홀딩"],
+                ["가로채기", "크로스"],
+                ["반응도"]
+            ],
+            "RWB": [
+                ["글래디에이터", "스톤", "특별 구성"],
+                ["플라이윙", "홀딩"],
+                ["가로채기", "크로스"],
+                ["반응도"]
+            ],
+            "GK": [
+                ["라스트라인", "GK 다이빙"],
+                ["글러브", "GK 위치 선정", "반사 신경"],
+                ["GK 제너럴리스트", "핸들링"]
+            ]
+        };
+
+        // 스킬부스트 검색 기능
+        const skillSearchInput = document.getElementById('skill-search');
+        const skillDropdown = document.getElementById('skill-dropdown');
+
+        skillSearchInput.addEventListener('input', () => {
+            const query = skillSearchInput.value.trim().toLowerCase();
+            skillDropdown.innerHTML = ''; // 기존 결과 초기화
+            if (query) {
+                for (const boost of Object.keys(skillBoosts)) {
+                    if (boost.toLowerCase().includes(query)) {
+                        const div = document.createElement('div');
+                        div.textContent = boost; // 스킬부스트 이름만 표시
+                        div.onclick = () => {
+                            skillSearchInput.value = boost; // 선택한 스킬부스트 이름을 입력란에 설정
+                            displaySkillResults(boost); // 검색 결과 표시
+                            skillDropdown.style.display = 'none'; // 드롭다운 숨김
+                        };
+                        skillDropdown.appendChild(div);
+                    }
+                }
+                skillDropdown.style.display = skillDropdown.childElementCount > 0 ? 'block' : 'none'; // 드롭다운 표시
+            } else {
+                skillDropdown.style.display = 'none'; // 입력란이 비어있으면 드롭다운 숨김
+            }
+        });
+
+        // 스탯 검색 기능
+        function setupStatSearch(statInputId, dropdownId) {
+            const statSearchInput = document.getElementById(statInputId);
+            const statDropdown = document.getElementById(dropdownId);
+
+            statSearchInput.addEventListener('input', () => {
+                const query = statSearchInput.value.trim().toLowerCase();
+                statDropdown.innerHTML = ''; // 기존 결과 초기화
+                if (query) {
+                    const uniqueStats = [...new Set(Object.values(skillBoosts).flat())]; // 모든 스탯의 유니크 값
+                    for (const stat of uniqueStats) {
+                        if (stat.toLowerCase().includes(query)) {
+                            const div = document.createElement('div');
+                            div.textContent = stat; // 스탯 이름 표시
+                            div.onclick = () => {
+                                statSearchInput.value = stat; // 선택한 스탯을 입력란에 설정
+                                statDropdown.style.display = 'none'; // 드롭다운 숨김
+                            };
+                            statDropdown.appendChild(div);
+                        }
+                    }
+                    statDropdown.style.display = statDropdown.childElementCount > 0 ? 'block' : 'none'; // 드롭다운 표시
+                } else {
+                    statDropdown.style.display = 'none'; // 입력란이 비어있으면 드롭다운 숨김
+                }
+            });
+        }
+
+        setupStatSearch('stat-search1', 'stat-dropdown1');
+        setupStatSearch('stat-search2', 'stat-dropdown2');
+        setupStatSearch('stat-search3', 'stat-dropdown3');
+
+        // 검색 버튼 클릭 시 스탯에 해당하는 스킬부스트 제공
+        document.getElementById('search-button').addEventListener('click', () => {
+            const stat1 = document.getElementById('stat-search1').value.trim();
+            const stat2 = document.getElementById('stat-search2').value.trim();
+            const stat3 = document.getElementById('stat-search3').value.trim();
+
+            const relevantBoosts = {};
+            const inputStats = [stat1, stat2, stat3].filter(stat => stat); // 비어있지 않은 스탯만 포함
+            if (inputStats.length === 0) {
+                // 입력된 스탯이 없으면 아무것도 표시하지 않음
+                displayStatResults({});
+                return;
+            }
+
+            // 검색된 각 스탯에 대해 해당하는 스킬부스트를 찾아서 추가
+            Object.entries(skillBoosts).forEach(([boost, stats]) => {
+                const includesAll = inputStats.every(inputStat => stats.includes(inputStat));
+                if (includesAll) {
+                    relevantBoosts[boost] = stats;
+                }
+            });
+
+            // 결과를 새로 고침하여 표시
+            displayStatResults(relevantBoosts, stat1, stat2, stat3);
+        });
+
+        // 검색 결과 표시 함수
+        function displaySkillResults(boost) {
+            const skillContent = document.getElementById('skill-content');
+            skillContent.innerHTML = `${boost}: ${skillBoosts[boost].join(', ')}`;
+        }
+
+        function displayStatResults(boosts, stat1, stat2, stat3) {
+            const statContent = document.getElementById('stat-content');
+            const boostsList = Object.keys(boosts).map(boost => {
+                const stats = Array.from(boosts[boost]).map(s => {
+                    const isBold = [stat1, stat2, stat3].includes(s);
+                    return `<span class="${isBold ? 'bold' : ''}">${s}</span>`;
+                }).join(', ');
+                return `${boost}: ${stats}`;
+            }).join('<br>');
+            statContent.innerHTML = ` ${boostsList}`;
+        }
+
+        // 포지션 검색 기능
+        const positionSearchInput = document.getElementById('position-search');
+        const positionDropdown = document.getElementById('position-dropdown');
+
+        positionSearchInput.addEventListener('input', () => {
+            const query = positionSearchInput.value.trim().toUpperCase(); // 대문자로 변환
+            positionDropdown.innerHTML = ''; // 기존 결과 초기화
+            if (query) {
+                for (const position in positionTiers) {
+                    if (position.includes(query)) {
+                        const div = document.createElement('div');
+                        div.textContent = position; // 포지션 이름 표시
+                        div.onclick = () => {
+                            positionSearchInput.value = position; // 선택한 포지션을 입력란에 설정
+                            displayPositionTier(position); // 티어표 표시
+                            positionDropdown.style.display = 'none'; // 드롭다운 숨김
+                        };
+                        positionDropdown.appendChild(div);
+                    }
+                }
+                positionDropdown.style.display = positionDropdown.childElementCount > 0 ? 'block' : 'none'; // 드롭다운 표시
+            } else {
+                positionDropdown.style.display = 'none'; // 입력란이 비어있으면 드롭다운 숨김
+            }
+        });
+
+        // 포지션 티어표 표시 함수
+        function displayPositionTier(position) {
+            const tierContent = document.getElementById('tier-content');
+            const tiers = positionTiers[position];
+            if (tiers) {
+                tierContent.innerHTML = tiers.map((tier, index) => {
+                    return `<strong>${index + 1}티어:</strong> ${tier.join(', ')}`;
+                }).join('<br>');
+            } else {
+                tierContent.innerHTML = '해당 포지션의 티어 정보가 없습니다.';
+            }
+        }
+
+        // 클릭 시 드롭다운 숨기기
+        document.addEventListener('click', (event) => {
+            if (!event.target.matches('#skill-search')) {
+                skillDropdown.style.display = 'none';
+            }
+            if (!event.target.matches('#stat-search1') && !event.target.matches('#stat-search2') && !event.target.matches('#stat-search3')) {
+                document.getElementById('stat-dropdown1').style.display = 'none';
+                document.getElementById('stat-dropdown2').style.display = 'none';
+                document.getElementById('stat-dropdown3').style.display = 'none';
+            }
+            if (!event.target.matches('#position-search')) {
+                positionDropdown.style.display = 'none';
+            }
+        });
+    function copyEmail() {
+        const emailInput = document.getElementById('email');
+        emailInput.style.display = 'block'; // 이메일 필드를 잠시 보이게 함
+        emailInput.select();
+        emailInput.setSelectionRange(0, 99999); // 모바일 호환성
+
+        document.execCommand('copy');
+        alert('이메일이 복사되었습니다!'); // 쌍따옴표 추가
+        
+        emailInput.style.display = 'none'; // 이메일 필드를 다시 숨김
+    }
+    </script>
+  Made by 이하준, 고범준
+  <h1 style="font-size: 20px;">문의용 이메일</h1>
+    <input type="text" id="email" value="leehajune1017@gmail.com" readonly style="display: none;">
+    <button onclick="copyEmail()" style="padding: 3px 6px; font-size: 10px;">복사하기</button>
+</body>
+</html>
