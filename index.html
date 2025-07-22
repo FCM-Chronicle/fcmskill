@@ -501,50 +501,51 @@
         // 포지션과 티어표 매핑
         const positionTiers = {
             "ST": [
-                ["막스맨", "아키텍트", "타이거"],
-                ["결정력", "공격 마스터", "스나이퍼", "슈퍼카", "로켓", "위치 선정", "민첩성",  "파워풀"],
-                ["헤딩", "세컨드 스트라이커", "페이스", "슈팅력"],
-                ["공격", "슈팅"]
+                ["막스맨", "파워풀", "아키텍트", "타이거"],
+                ["결정력", "공격 마스터", "스나이퍼", "슈퍼카", "로켓", "위치 선정", "민첩성"],
+                ["헤딩", "세컨드 스트라이커", "페이스"],
+                ["공격", "슈팅", "슈팅력"]
             ],
             "CF": [
                 ["막스맨", "아키텍트"],
-                ["타이거", "결정력", "파워풀", "스나이퍼", "슈퍼카", "로켓", "위치 선정"],
-                ["헤딩", "세컨드 스트라이커", "페이스", "공격 마스터",],
+                ["타이거", "결정력", "공격 마스터", "파워풀", "스나이퍼", "슈퍼카", "로켓", "위치 선정"],
+                ["헤딩", "세컨드 스트라이커", "페이스"],
                 ["공격", "슈팅", "슈팅력"]
             ],
             "LW": [
-                ["나이프", "슈퍼카", "로켓", "속도", "로켓"],
-                ["마에스트로", "스나이퍼", "호크", "공격 마스터", "어택미드", "민첩성"],
-                ["페이스", "위치 선정", "세컨드 스트라이커", "결정력"],
-                ["시야"]
+                ["나이프", "슈퍼카", "로켓"],
+                ["마에스트로", "스나이퍼", "호크", "속도", "공격 마스터", "세컨드 스트라이커"],
+                ["페이스", "위치 선정"],
+                ["민첩성"]
             ],
             "RW": [
-                ["나이프", "슈퍼카", "로켓", "속도", "로켓"],
-                ["마에스트로", "스나이퍼", "호크", "공격 마스터", "어택미드", "민첩성"],
-                ["페이스", "위치 선정", "세컨드 스트라이커", "결정력"],
-                ["시야"]
+                ["나이프", "슈퍼카", "로켓"],
+                ["마에스트로", "스나이퍼", "호크", "속도", "공격 마스터", "세컨드 스트라이커"],
+                ["페이스", "위치 선정"],
+                ["민첩성"]
+            ],
             "LM": [
-                ["나이프", "슈퍼카", "로켓", "속도", "로켓"],
-                ["마에스트로", "스나이퍼", "호크", "공격 마스터", "어택미드", "민첩성"],
-                ["페이스", "위치 선정", "세컨드 스트라이커", "결정력"],
-                ["시야"]
+                ["나이프", "슈퍼카", "로켓"],
+                ["마에스트로", "스나이퍼", "호크", "세컨드 스트라이커", "속도", "공격 마스터"],
+                ["세컨드 스트라이커", "페이스"],
+                ["민첩성", "위치 선정"]
             ],
             "RM": [
-                ["나이프", "슈퍼카", "로켓", "속도", "로켓"],
-                ["마에스트로", "스나이퍼", "호크", "공격 마스터", "어택미드", "민첩성"],
-                ["페이스", "위치 선정", "세컨드 스트라이커", "결정력"],
-                ["시야"]
+                ["나이프", "슈퍼카", "로켓"],
+                ["마에스트로", "스나이퍼", "호크", "세컨드 스트라이커", "속도", "공격 마스터"],
+                ["세컨드 스트라이커", "페이스"],
+                ["민첩성", "위치 선정"]
             ],
             "CAM": [
-                ["아키텍트", "스나이퍼", "막스맨"],
+                ["아키텍트", "스나이퍼"],
                 ["공격 마스터", "어택미드", "마에스트로"],
                 ["플레이메이커", "미드엔진", "짧은 패스"],
                 ["카운터", "프리킥", "시야", "볼 컨트롤", "가속", "드리블", "제너럴리스트", "패스"]
             ],
             "CM": [
                 ["아키텍트", "스나이퍼"],
-                ["어택미드", "마에스트로", "막스맨", "공격 마스터"],
-                ["플레이메이커", "주장", "미드엔진", "슈팅력", "짧은 패스"],
+                ["공격 마스터", "어택미드", "짧은 패스", "마에스트로"],
+                ["플레이메이커", "주장", "미드엔진", "슈팅력"],
                 ["카운터", "프리킥", "시야", "볼 컨트롤", "가속", "드리블", "제너럴리스트", "패스"]
             ],
             "CDM": [
@@ -554,33 +555,33 @@
                 ["반응도", "제너럴리스트", "가로채기", "공격성"]
             ],
             "CB": [
-                ["홀딩", "월"],
-                ["특별 구성", "스톤"],
-                ["앵커", "마크", "공격성", "수비 마스터"],
-                ["수비", "피지컬", "힘", "태클","(센백 2개면 하나는 홀딩 or 월 반대는 특구 or 스톤)"]
+                ["홀딩", "월", "스톤", "특별 구성"],
+                ["수비 마스터"],
+                ["앵커", "마크", "공격성"],
+                ["수비", "피지컬", "힘", "태클"]
             ],
             "LB": [
-                ["글래디에이터", "스톤", "특별 구성", "홀딩", "플라이윙"],
-                ["가로채기", "공격성"],
-                ["크로스"],
+                ["글래디에이터", "플라이윙", "특별 구성"],
+                ["스톤", "홀딩"],
+                ["가로채기", "크로스"],
                 ["반응도"]
             ],
             "RB": [
-                ["글래디에이터", "스톤", "특별 구성", "홀딩", "플라이윙"],
-                ["가로채기", "공격성"],
-                ["크로스"],
+                ["글래디에이터", "스톤", "특별 구성"],
+                ["플라이윙", "홀딩"],
+                ["가로채기", "크로스"],
                 ["반응도"]
             ],
             "LWB": [
-                ["글래디에이터", "스톤", "특별 구성", "홀딩", "플라이윙"],
-                ["가로채기", "공격성"],
-                ["크로스"],
+                ["글래디에이터", "스톤", "특별 구성"],
+                ["플라이윙", "홀딩"],
+                ["가로채기", "크로스"],
                 ["반응도"]
             ],
             "RWB": [
-                ["글래디에이터", "스톤", "특별 구성", "홀딩", "플라이윙"],
-                ["가로채기", "공격성"],
-                ["크로스"],
+                ["글래디에이터", "스톤", "특별 구성"],
+                ["플라이윙", "홀딩"],
+                ["가로채기", "크로스"],
                 ["반응도"]
             ],
             "GK": [
@@ -597,50 +598,68 @@
         skillSearchInput.addEventListener('input', () => {
             const query = skillSearchInput.value.trim().toLowerCase();
             skillDropdown.innerHTML = '';
-            if (query) {
-                for (const boost of Object.keys(skillBoosts)) {
-                    if (boost.toLowerCase().includes(query)) {
-                        const div = document.createElement('div');
-                        div.textContent = boost;
-                        div.onclick = () => {
-                            skillSearchInput.value = boost;
-                            displaySkillResults(boost);
-                            skillDropdown.style.display = 'none';
-                        };
-                        skillDropdown.appendChild(div);
-                    }
-                }
-                skillDropdown.style.display = skillDropdown.childElementCount > 0 ? 'block' : 'none';
+            
+            if (query.length > 0) {
+                const matchedBoosts = Object.keys(skillBoosts).filter(boost => 
+                    boost.toLowerCase().includes(query)
+                );
+                
+                matchedBoosts.forEach(boost => {
+                    const div = document.createElement('div');
+                    div.textContent = boost;
+                    div.onclick = () => {
+                        skillSearchInput.value = boost;
+                        displaySkillResults(boost);
+                        skillDropdown.style.display = 'none';
+                    };
+                    skillDropdown.appendChild(div);
+                });
+                
+                skillDropdown.style.display = matchedBoosts.length > 0 ? 'block' : 'none';
             } else {
                 skillDropdown.style.display = 'none';
             }
+        });
+
+        // 포커스 시에는 드롭다운 표시하지 않음
+        skillSearchInput.addEventListener('focus', () => {
+            // 포커스만으로는 드롭다운 표시하지 않음
         });
 
         // 스탯 검색 기능
         function setupStatSearch(statInputId, dropdownId) {
             const statSearchInput = document.getElementById(statInputId);
             const statDropdown = document.getElementById(dropdownId);
+            const uniqueStats = [...new Set(Object.values(skillBoosts).flat())].sort();
 
             statSearchInput.addEventListener('input', () => {
                 const query = statSearchInput.value.trim().toLowerCase();
                 statDropdown.innerHTML = '';
-                if (query) {
-                    const uniqueStats = [...new Set(Object.values(skillBoosts).flat())];
-                    for (const stat of uniqueStats) {
-                        if (stat.toLowerCase().includes(query)) {
-                            const div = document.createElement('div');
-                            div.textContent = stat;
-                            div.onclick = () => {
-                                statSearchInput.value = stat;
-                                statDropdown.style.display = 'none';
-                            };
-                            statDropdown.appendChild(div);
-                        }
-                    }
-                    statDropdown.style.display = statDropdown.childElementCount > 0 ? 'block' : 'none';
+                
+                if (query.length > 0) {
+                    const matchedStats = uniqueStats.filter(stat => 
+                        stat.toLowerCase().includes(query)
+                    );
+                    
+                    matchedStats.forEach(stat => {
+                        const div = document.createElement('div');
+                        div.textContent = stat;
+                        div.onclick = () => {
+                            statSearchInput.value = stat;
+                            statDropdown.style.display = 'none';
+                        };
+                        statDropdown.appendChild(div);
+                    });
+                    
+                    statDropdown.style.display = matchedStats.length > 0 ? 'block' : 'none';
                 } else {
                     statDropdown.style.display = 'none';
                 }
+            });
+
+            // 포커스 시에는 드롭다운 표시하지 않음
+            statSearchInput.addEventListener('focus', () => {
+                // 포커스만으로는 드롭다운 표시하지 않음
             });
         }
 
@@ -674,27 +693,37 @@
         // 포지션 검색 기능
         const positionSearchInput = document.getElementById('position-search');
         const positionDropdown = document.getElementById('position-dropdown');
+        const allPositions = Object.keys(positionTiers);
 
         positionSearchInput.addEventListener('input', () => {
             const query = positionSearchInput.value.trim().toUpperCase();
             positionDropdown.innerHTML = '';
-            if (query) {
-                for (const position in positionTiers) {
-                    if (position.includes(query)) {
-                        const div = document.createElement('div');
-                        div.textContent = position;
-                        div.onclick = () => {
-                            positionSearchInput.value = position;
-                            displayPositionTier(position);
-                            positionDropdown.style.display = 'none';
-                        };
-                        positionDropdown.appendChild(div);
-                    }
-                }
-                positionDropdown.style.display = positionDropdown.childElementCount > 0 ? 'block' : 'none';
+            
+            if (query.length > 0) {
+                const matchedPositions = allPositions.filter(position => 
+                    position.includes(query)
+                );
+                
+                matchedPositions.forEach(position => {
+                    const div = document.createElement('div');
+                    div.textContent = position;
+                    div.onclick = () => {
+                        positionSearchInput.value = position;
+                        displayPositionTier(position);
+                        positionDropdown.style.display = 'none';
+                    };
+                    positionDropdown.appendChild(div);
+                });
+                
+                positionDropdown.style.display = matchedPositions.length > 0 ? 'block' : 'none';
             } else {
                 positionDropdown.style.display = 'none';
             }
+        });
+
+        // 포커스 시에는 드롭다운 표시하지 않음
+        positionSearchInput.addEventListener('focus', () => {
+            // 포커스만으로는 드롭다운 표시하지 않음
         });
 
         // 검색 결과 표시 함수들
@@ -726,8 +755,10 @@
             if (tiers) {
                 const tierColors = ['#39FF14', '#00FFFF', '#FFD700', '#FF6B6B'];
                 tierContent.innerHTML = tiers.map((tier, index) => {
-                    return `<div class="tier-result" style="border-left-color: ${tierColors[index] || '#39FF14'};">
-                        <strong style="color: ${tierColors[index] || '#39FF14'};">${index + 1}티어:</strong> ${tier.join(', ')}
+                    const skillList = tier.map(skill => `<div style="margin: 5px 0; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; border-left: 3px solid ${tierColors[index] || '#39FF14'};">${skill}</div>`).join('');
+                    return `<div class="tier-result" style="border-left-color: ${tierColors[index] || '#39FF14'}; margin-bottom: 20px;">
+                        <strong style="color: ${tierColors[index] || '#39FF14'}; display: block; margin-bottom: 10px; font-size: 16px;">${index + 1}티어</strong>
+                        ${skillList}
                     </div>`;
                 }).join('');
             } else {
