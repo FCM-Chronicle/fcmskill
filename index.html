@@ -416,7 +416,7 @@
         <!-- 포지션 검색 섹션 -->
         <div class="section">
             <div class="dropdown">
-                <label for="position-search">⚽ 포지션별 티어표 (1티어: 개좋음, 2티어: 좋음)</label>
+                <label for="position-search">⚽ 포지션별 티어표 (1티어: 개좋음, 2티어: 좋음, 3티어: 굳이? 4티어: 쓰레기)</label>
                 <input type="text" id="position-search" placeholder="포지션을 입력하세요 (ST, CM, GK 등)..." autocomplete="off">
                 <div id="position-dropdown" class="dropdown-content"></div>
             </div>
@@ -501,9 +501,9 @@
         // 포지션과 티어표 매핑
         const positionTiers = {
             "ST": [
-                ["막스맨", "파워풀", "아키텍트", "타이거"],
-                ["결정력", "공격 마스터", "스나이퍼", "슈퍼카", "로켓", "위치 선정", "민첩성"],
-                ["헤딩", "세컨드 스트라이커", "페이스"],
+                ["막스맨", "아키텍트"],
+                ["공격 마스터", "스나이퍼", "파워풀",  "슈퍼카", "로켓", "위치 선정", "민첩성", "타이거"],
+                ["헤딩", "세컨드 스트라이커", "페이스", "결정력",],
                 ["공격", "슈팅", "슈팅력"]
             ],
             "CF": [
