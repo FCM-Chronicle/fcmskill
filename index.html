@@ -750,21 +750,23 @@
         }
 
         function displayPositionTier(position) {
-            const tierContent = document.getElementById('tier-content');
-            const tiers = positionTiers[position];
-            if (tiers) {
-                const tierColors = ['#39FF14', '#00FFFF', '#FFD700', '#FF6B6B'];
-                tierContent.innerHTML = tiers.map((tier, index) => {
-                    const skillList = tier.map(skill => `<div style="margin: 5px 0; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; border-left: 3px solid ${tierColors[index] || '#39FF14'};">${skill}</div>`).join('');
-                    return `<div class="tier-result" style="border-left-color: ${tierColors[index] || '#39FF14'}; margin-bottom: 20px;">
-                        <strong style="color: ${tierColors[index] || '#39FF14'}; display: block; margin-bottom: 10px; font-size: 16px;">${index + 1}티어</strong>
-                        ${skillList}
-                    </div>`;
-                }).join('');
-            } else {
-                tierContent.innerHTML = '<span style="color: rgba(255, 255, 255, 0.6);">해당 포지션의 티어 정보가 없습니다.</span>';
-            }
-        }
+    const tierContent = document.getElementById('tier-content');
+    const tiers = positionTiers[position];
+    if (tiers) {
+        const tierColors = ['#39FF14', '#00FFFF', '#FFD700', '#FF6B6B'];
+        tierContent.innerHTML = tiers.map((tier, index) => {
+            const skillList = tier.map(skill => 
+                `<span style="display: inline-block; margin: 5px 8px; padding: 8px 16px; background: rgba(255,255,255,0.1); border-radius: 20px; border: 2px solid ${tierColors[index]}; color: ${tierColors[index]}; font-weight: 600; white-space: nowrap;">${skill}</span>`
+            ).join('');
+            return `<div class="tier-result" style="border-left-color: ${tierColors[index]}; margin-bottom: 20px;">
+                <strong style="color: ${tierColors[index]}; display: block; margin-bottom: 10px; font-size: 16px;">${index + 1}티어</strong>
+                <div style="line-height: 2.5;">${skillList}</div>
+            </div>`;
+        }).join('');
+    } else {
+        tierContent.innerHTML = '<span style="color: rgba(255, 255, 255, 0.6);">해당 포지션의 티어 정보가 없습니다.</span>';
+    }
+}
 
         // 이메일 복사 기능
         function copyEmail() {
